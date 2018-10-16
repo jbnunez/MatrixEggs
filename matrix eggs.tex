@@ -1,0 +1,49 @@
+\documentclass[12pt,letterpaper]{letter}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{enumerate}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{dsfont}
+
+\newcommand{\m}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\inn}[1]{\langle #1 \rangle}
+\newcommand{\pfrac}[2]{ \frac{\partial #1 }{\partial #2 } }
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\lam}{\lambda}
+
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\NN}{\mathcal{N}}
+\newcommand{\arrow}{\rightarrow}
+
+
+
+\begin{document}
+Downsize a matrix by turning each neighborhood of a matrix into a covariance matrix by doing PCA on the elements of the neighborhood.  
+
+Divide image into grids of size $a\times b$.  Then do PCA on each of these grids, and keep the $c$ most significant eigenvectors and eigenvalues for each grid (these form ellipses, ``eggs").  For a video, map these over time and monitor the egg shapes for anomalies.  
+\[\lim_{\Delta t\to 0} \|\frac{A_{Egg}(t+\Delta t)- A_{Egg}(t)}{\Delta t}\| =\]
+\[ \lim_{\Delta t\to 0} \| \frac{(\lambda_1(t+\Delta t), \lambda_2(t+\Delta t))-(\lambda_1( t), \lambda_2(t))}{\Delta t}\|_2 + d_{Riem, SO(2)}(R(t+\Delta t),R(t))\]
+Let $u_1,u_2$ be unit eigenvectors, then $\Lambda = \m{\lambda_1\\ \lambda_2}, R=\m{u_1 & u_2}$
+R happens to be a rotation matrix, so it can be repsented as $e^{i\theta}$
+\[\|R(t+\Delta t)-R(t)\| \sim \frac{e^{i\theta(t+\Delta t}}{e^{i\theta}} = e^{i\theta (\Delta t) }= |\theta(t+\Delta t) - \theta(t)\]
+Result will be a matrix with dimensions equal to the number of neighborhoods, with each entry equal to the distance derived above.  For data where changes are highly localized, the resulting matrix will be sparse with anomalies in the neighborhoods corresponding to large nonzero values.
+
+Thm: the set of all matrix eggs forms a vector space.
+
+
+
+
+
+
+
+
+
+
+\end{document} 
