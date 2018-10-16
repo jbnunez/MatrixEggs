@@ -1,7 +1,9 @@
 #matrixeggs.py
 import numpy as np
 import numpy.linalg as lin 
-
+import matplotlib as mplt 
+import matplotlib.pyplot as plt 
+import matplotlib.patches as pat
 
 def to_eggs_grayscale(image, dim1=3, dim2=3, egg_dim=2, use_rows=True):
     """
@@ -39,19 +41,19 @@ def to_eggs_grayscale(image, dim1=3, dim2=3, egg_dim=2, use_rows=True):
             #eigenvectors for a symmetric matrix
             evals, evecs = lin.eigh(cov)
             #throw out least significant dimensions
-            evecs = evecs[:,:-egg_dim]
+            evecs = evecs[:,-egg_dim:]
             #project to lower dimension
             lower_dim = nbhd @ evecs
 
             #calculate evals/evecs for lower dimension
-            evals, evecs = lin.eigh(np.cov(lower_dim))
+            evals, evecs = lin.eigh(np.cov(lower_dim.T))
             eggvecs[i,j] = evecs
             eggvals[i,j] = evals
 
     return eggvals, eggvecs
 
 
-def to_eggs(image, dim1=3, dim2=3, egg_dim=2):
+def to_eggs(image, dim1=15, dim2=15, egg_dim=2):
     '''
     For each dim1 x dim2 neighborhood in an image, use pca to project the values
     of the pixels down into egg_dim dimensions, then compute the 'eggs', which
@@ -77,18 +79,18 @@ def to_eggs(image, dim1=3, dim2=3, egg_dim=2):
         for j in range(eggwid):
             #reshape a neighborhood for computing covariance across the pixels
             nbhd = image[i*dim1:(i+1)*dim1, j*dim2:(j+1)*dim2].reshape(dim1*dim2, 3)
-            cov = np.cov(nbhd)
+            cov = np.cov(nbhd.T)
             #Use pca to project down into lower dimesion
             #using eigh always results in O.N. matrix of 
             #eigenvectors for a symmetric matrix
             evals, evecs = lin.eigh(cov)
             #throw out least significant dimensions
-            evecs = evecs[:,:-egg_dim]
+            evecs = evecs[:,-egg_dim:]
             #project to lower dimension
             lower_dim = nbhd @ evecs
 
             #calculate evals/evecs for lower dimension
-            evals, evecs = lin.eigh(np.cov(lower_dim))
+            evals, evecs = lin.eigh(np.cov(lower_dim.T))
             eggvecs[i,j] = evecs
             eggvals[i,j] = evals
 
@@ -108,7 +110,7 @@ def egg_dist(eggs1, eggs2):
     '''
     (eggvals1, eggvecs1) = eggs1
     (eggvals2, eggvecs2) = eggs2
-    dim1, dim2 = eggvals1.shape[0]. eggvals1.shape[1]
+    dim1, dim2 = eggvals1.shape[0], eggvals1.shape[1]
     egg_dists = np.empty((dim1, dim2), dtype=np.float64)
 
     for i in range(dim1):
@@ -130,17 +132,42 @@ def total_dist(eggs1, eggs2):
     return total_dist(egg_dist(eggs1, eggs2))
 
 def plot_eggs(eggvals, eggvecs):
-    pass
+    biggest = np.amax(eggvals)*2
+    xdim, ydim = eggvals.shape[0], eggvals.shape[1]
+    ellipses = []
+    for i in range(xdim):
+        for j in range(ydim):
+            width = eggvals[i,j,0]/biggest
+            height = eggvals[i,j,1]/biggest
+            angle = np.arccos(eggvecs[i,j,0,0])
+            ellipses.append(pat.Ellipse((i+0.5,j+0.5), width, height, angle, fill=False))
+    fig, ax = plt.subplots(subplot_kw={'aspect': 'equal'})
+    for e in ellipses:
+        ax.add_artist(e)
+    ax.set_xlim(0, xdim+1)
+    ax.set_ylim(0, ydim+1)        
+    plt.savefig('test')
+
 
 def plot_egg_dists(egg_dists):
     pass
 
 
 
-
-
-
-
+from pylab import imshow, show, get_cmap
+from numpy import random
+from scipy import misc
+print('getting raccoon from internet')
+f = misc.face()
+print(f.shape)
+#misc.imsave('test4.jpg', f)
+#plt.imshow(f)
+#plt.close()
+#plt.show()
+print("converting to eggs")
+eggvals, eggvecs = to_eggs(f,dim1=15,dim2=15)
+print("plotting")
+plot_eggs(eggvals, eggvecs)
 
 
 
