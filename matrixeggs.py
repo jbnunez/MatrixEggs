@@ -4,6 +4,9 @@ import numpy.linalg as lin
 import matplotlib as mplt 
 import matplotlib.pyplot as plt 
 import matplotlib.patches as pat
+import scipy.ndimage as nd
+from pylab import imshow, show, get_cmap
+import cv2
 
 def to_eggs_grayscale(image, dim1=3, dim2=3, egg_dim=2, use_rows=True):
     """
@@ -148,26 +151,65 @@ def plot_eggs(eggvals, eggvecs):
     ax.set_ylim(0, ydim+1)        
     plt.savefig('test')
 
+def split_image(image):
+    l, w = image.shape[0], image.shape[1]
+    image_l = image[:, :(w//2), :]
+    image_r = image[:, (w//2):, :]
+    return(image_l, image_r)
+
 
 def plot_egg_dists(egg_dists):
     pass
 
 
+def dist_heat_map(image1, image2, dim1=15, dim2=15, egg_dim=2):
+    egg1 = to_eggs(image1, dim1, dim2, egg_dim)
+    egg2 = to_eggs(image2, dim1, dim2, egg_dim)
+    distances = egg_dist(egg1, egg2)
+    imshow(distances, cmap=get_cmap("Spectral"), interpolation='nearest')
+    show()
 
-from pylab import imshow, show, get_cmap
-from numpy import random
-from scipy import misc
-print('getting raccoon from internet')
-f = misc.face()
-print(f.shape)
-#misc.imsave('test4.jpg', f)
-#plt.imshow(f)
-#plt.close()
-#plt.show()
-print("converting to eggs")
-eggvals, eggvecs = to_eggs(f,dim1=15,dim2=15)
-print("plotting")
-plot_eggs(eggvals, eggvecs)
+    
+def spot_the_difference(image_name ='spot.png', dim1=15, dim2=15, egg_dim=2):
+    image = nd.imread(image_name)
+    left, right = split_image(image)
+    dist_heat_map(left, right, dim1, dim2, egg_dim)
+
+def extract_frames(video_file='test_video.mp4'):
+    '''
+    Takes in the name of a video file and outputs
+    a list of each frame
+    '''
+    images = []
+    vidcap = cv2.VideoCapture(video_file)
+    success,image = vidcap.read()
+    success = True
+    count = 0
+    while success:
+        images.append(image)
+        success,image = vidcap.read()
+        # print('Read a new frame: ' + str(success) + ", " + str(count))
+        count += 1
+    return images
+
+def dist_heat_map_video(video_file='test_video.mp4', dim1=20, dim2=20, egg_dim=2):
+    print("Beginning extraction...")
+    images = extract_frames(video_file)
+    print("Done with extraction.")
+    eggs = []
+    print("Converting to eggs...")
+    for image in images:
+        eggs.append(to_eggs(image, dim1, dim2, egg_dim))
+    print("Getting distances...")
+    distances = []
+    for i in range(len(eggs)-1):
+        distances.append(egg_dist(eggs[i], eggs[i+1]))
+    return distances
+
+def make_video(frames):
+    pass
+
+
 
 
 
