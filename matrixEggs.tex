@@ -1,0 +1,58 @@
+% This is a document written to introduce students in MATH 2300-04 at FSU to LaTeX and Overleaf.  Any other students are free to use this as well.
+
+% All of this stuff with '%' in front is a comment and ignored by the compiler.
+%
+% The lines before the "\begin{document}" line is called the preamble.
+% This is where you load particular packages you need.
+% Until you are more experienced, or the program says you are missing packages, it is safe to ignore it.
+%
+%----------------------------------
+
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}% Change the margins here if you wish.
+\setlength{\parindent}{0pt} % This is the set the indent length for new paragraphs, change if you want.
+\setlength{\parskip}{5pt} % This sets the distance between paragraphs, which will be used anytime you have a blank line in your LaTeX code.
+\pagenumbering{gobble}% This means the page will not be numbered. You can comment it out if you like page numbers.
+
+
+%These packages allow the most of the common "mathly things"
+\usepackage{amsmath,amsthm,amssymb}
+
+\usepackage{mathtools,pgfplots}
+%This package allows you to add graphs or any other images.
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+
+
+%These are the packages I usually use and needed for this document. There are bajillions of others to do nearly antyhing you want.
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{multicol}
+
+\newcommand{\pn}[1]{\left( #1 \right)}
+
+\newtheorem{theorem}{Theorem}
+
+%------------------------------------------
+% The stuff you want to edit starts here.
+%------------------------------------------
+\begin{document}
+
+\title{Matrix Eggs} % You should make this the title of your project.
+\author{Tommy Schneider, Cassidy Le, Joe Nunez} % Replace this with your name.
+% \date{} I have this commented out so that the program will use whatever today's date is.  You can specify a particular date (or use this for other info if you need) in the {} or leave the {} empty for no date (or other extra info) to appear in the title
+
+\maketitle
+
+\section{Basics of Principle Component Analysis}
+\section{Matrix Eggs}
+\subsection{Basic Examples}
+\begin{enumerate}
+	\item Solid Color
+	\item Noise
+\end{enumerate}
+\section{Visualization Method 1: Heat Maps}
+\subsection{Anomaly Detection in Spot the Difference Photos}
+\subsection{Videos}
+
+\end{document}
