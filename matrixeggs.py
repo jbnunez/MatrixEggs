@@ -134,21 +134,35 @@ def total_dist(egg_dists):
 def total_dist(eggs1, eggs2):
     return total_dist(egg_dist(eggs1, eggs2))
 
+def diff_as_eggs(eggs1, eggs2):
+    (eggvals1, eggvecs1) = eggs1
+    (eggvals2, eggvecs2) = eggs2
+    dim1, dim2 = eggvals1.shape[0], eggvals1.shape[1]
+    diffvals = np.empty(eggvals1.shape, dtype=np.float64)
+    diffvecs = np.empty(eggvecs1.shape, dtype=np.float64)
+
+    for i in range(dim1):
+        for j in range(dim2):
+            diffvals[i,j] = np.absolute(eggvals1[i,j]-eggvals2[i,j])
+            diffvecs[i,j] = (eggvecs1[i,j] @ eggvecs2[i,j].T)
+
+    return (diffvals, diffvecsv)
+
 def plot_eggs(eggvals, eggvecs):
-    biggest = np.amax(eggvals)*2
+    biggest = np.amax(eggvals)
     xdim, ydim = eggvals.shape[0], eggvals.shape[1]
     ellipses = []
     for i in range(xdim):
         for j in range(ydim):
-            width = eggvals[i,j,0]/biggest
-            height = eggvals[i,j,1]/biggest
+            width = np.log(eggvals[i,j,0]/biggest + 1)
+            height = np.log(eggvals[i,j,1]/biggest + 1)
             angle = np.arccos(eggvecs[i,j,0,0])
-            ellipses.append(pat.Ellipse((i+0.5,j+0.5), width, height, angle, fill=False))
+            ellipses.append(pat.Ellipse((j+0.5,xdim+0.5-i), width, height, angle, fill=False))
     fig, ax = plt.subplots(subplot_kw={'aspect': 'equal'})
     for e in ellipses:
         ax.add_artist(e)
-    ax.set_xlim(0, xdim+1)
-    ax.set_ylim(0, ydim+1)        
+    ax.set_xlim(0, ydim+1)
+    ax.set_ylim(0, xdim+1)        
     plt.savefig('test')
 
 def split_image(image):
@@ -157,9 +171,6 @@ def split_image(image):
     image_r = image[:, (w//2):, :]
     return(image_l, image_r)
 
-
-def plot_egg_dists(egg_dists):
-    pass
 
 
 def dist_heat_map(image1, image2, dim1=15, dim2=15, egg_dim=2):
