@@ -18,7 +18,7 @@
 %These packages allow the most of the common "mathly things"
 \usepackage{amsmath,amsthm,amssymb}
 
-\usepackage{mathtools,pgfplots}
+\usepackage{mathtools,pgfplots,graphicx}
 %This package allows you to add graphs or any other images.
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
@@ -52,7 +52,29 @@
 	\item Noise
 \end{enumerate}
 \section{Visualization Method 1: Heat Maps}
+One simple way of making sense of the distance matrix between two sets of matrix eggs is by plotting them as a heat map.
 \subsection{Anomaly Detection in Spot the Difference Photos}
+One application
+Take, for example, the following two $386\times 350$ images:
+\begin{center}
+	\begin{tabular}{c c}
+		\includegraphics[scale=0.5]{spot_left.png} & \includegraphics[scale=0.5]{spot_right.png} \\
+	\end{tabular}
+\end{center}
+\begin{center}
+	\begin{tabular}{c c}
+		\includegraphics[scale=0.5]{spot_100_100.png} & \includegraphics[scale=0.5]{spot_50_50.png} \\
+		$100 \times 100$  & $50 \times 50$ \\
+		\includegraphics[scale=0.5]{spot_25_25.png} & \includegraphics[scale=0.5]{spot_10_10.png} \\
+		$25 \times 25$  & $10 \times 10$ \\
+		\includegraphics[scale=0.5]{spot_5_5.png} & \includegraphics[scale=0.5]{spot_2_2.png} \\
+		$5 \times 5$  & $2 \times 2$ \\
+	\end{tabular}
+\end{center}
+
+
 \subsection{Videos}
+
+\section{Anomaly Detection in Brain Tumor Images}
 
 \end{document}
